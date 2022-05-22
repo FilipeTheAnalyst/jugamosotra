@@ -9,8 +9,6 @@ class JugamosSpider(scrapy.Spider):
 
     def parse(self, response):
         for games in response.css("h2.h3.product-title"):
-            # games url
-            print(games.css('a ::attr(href)').get())
             yield response.follow(games.css('a ::attr(href)').get(), callback=self.parse_games)
 
             next_page = response.css(
@@ -24,7 +22,8 @@ class JugamosSpider(scrapy.Spider):
             items['id'] = int(response.css(
                 "datos-juego-bgg ::attr(id-juego)").get())
         except:
-            print('Nao existe')
+            items['id'] = int(response.css(
+                "div.product-description a::attr(href)").re("\d+")[0])
         items['name'] = response.css("h1.h1 ::text").get().strip()
         items['price'] = float(response.css('span[itemprop="price"] ::text').get(
         ).replace("\xa0", "").replace("€", "").replace(",", "."))
