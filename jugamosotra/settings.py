@@ -7,6 +7,7 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+from shutil import which
 BOT_NAME = 'jugamosotra'
 
 SPIDER_MODULES = ['jugamosotra.spiders']
@@ -19,6 +20,20 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
+
+################ SCRAPY SELENIUM ###########################
+
+
+SELENIUM_DRIVER_NAME = 'chrome'
+SELENIUM_DRIVER_EXECUTABLE_PATH = which('chromedriver')
+# '--headless' if using chrome instead of firefox
+SELENIUM_DRIVER_ARGUMENTS = ['-headless']
+
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_selenium.SeleniumMiddleware': 800
+}
+
+############## END SCRAPY SELENIUM #########################
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -64,7 +79,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'jugamosotra.pipelines.JugamosotraPipeline': 300,
+    'jugamosotra.pipelines.JugamosotraPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
